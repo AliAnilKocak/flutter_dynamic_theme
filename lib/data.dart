@@ -1,4 +1,4 @@
-import 'package:programmerquotes/models/QuetoModel.dart';
+import 'package:programmerquotes/models/queto_model.dart';
 
 class Data {
   static List<QuetoModel> data = [

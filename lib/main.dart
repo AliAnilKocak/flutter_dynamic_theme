@@ -1,8 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:programmerquotes/screens/HomePage.dart';
+import 'package:programmerquotes/provider/theme_notifier.dart';
+import 'package:programmerquotes/screens/home_page.dart';
+import 'package:provider/provider.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(
+    ChangeNotifierProvider<ThemeNotifier>(
+      create: (_) => ThemeNotifier(Color(0xFF56D4F9)),
+      child: MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {

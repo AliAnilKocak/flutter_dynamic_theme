@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_material_color_picker/flutter_material_color_picker.dart';
-import 'package:programmerquotes/models/QuetoModel.dart';
+import 'package:programmerquotes/models/queto_model.dart';
+import 'package:programmerquotes/provider/theme_notifier.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../data.dart';
@@ -15,30 +17,32 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final themeColor = Provider.of<ThemeNotifier>(context);
+
     return SafeArea(
       child: Scaffold(
         body: Column(
-          children: <Widget>[buildHeader(context), buildBody()],
+          children: <Widget>[buildHeader(context,themeColor), buildBody(themeColor)],
         ),
       ),
     );
   }
 
-  buildBody() {
+  buildBody(themeColor) {
     return Expanded(
       child: ListView(
         shrinkWrap: true,
         children: data.map((word) {
           return Padding(
             padding: const EdgeInsets.only(left: 8.0, right: 8.0),
-            child: buildItem(word),
+            child: buildItem(word,themeColor),
           );
         }).toList(),
       ),
     );
   }
 
-  buildHeader(BuildContext context) {
+  buildHeader(BuildContext context,themeColor) {
     return Container(
       margin: EdgeInsets.only(bottom: 12),
       width: MediaQuery.of(context).size.width,
@@ -46,7 +50,7 @@ class _HomePageState extends State<HomePage> {
       decoration: BoxDecoration(
           boxShadow: [
             BoxShadow(
-              color: Theme.of(context).primaryColor,
+              color: themeColor.getColor(),
               blurRadius: 20.0,
               // has the effect of softening the shadow
               spreadRadius: 1.0, // has the effect of extending the shadow
@@ -56,8 +60,8 @@ class _HomePageState extends State<HomePage> {
               bottomLeft: Radius.circular(64),
               bottomRight: Radius.circular(64)),
           gradient: new LinearGradient(colors: [
-            Theme.of(context).primaryColor,
-            Theme.of(context).primaryColor,
+            themeColor.getColor(),
+            themeColor.getColor(),
           ])),
       child: Align(
         alignment: Alignment.center,
@@ -74,7 +78,7 @@ class _HomePageState extends State<HomePage> {
             ),
             GestureDetector(
               onTap: () {
-                _openFullMaterialColorPicker(Theme.of(context).primaryColor);
+                _openFullMaterialColorPicker(themeColor);
               },
               child: Text(
                 "Tema Değiştir",
@@ -87,14 +91,14 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  buildItem(QuetoModel data) {
+  buildItem(QuetoModel data,themeColor) {
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-            color: Theme.of(context).primaryColor,
+            color: themeColor.getColor(),
             blurRadius: 5.0, // has the effect of softening the shadow
             spreadRadius: 0.5, // has the effect of extending the shadow
           )
@@ -106,7 +110,7 @@ class _HomePageState extends State<HomePage> {
         children: <Widget>[
           Container(
             decoration: BoxDecoration(
-                color: Theme.of(context).primaryColor,
+                color: themeColor.getColor(),
                 borderRadius: BorderRadius.only(
                   bottomLeft: Radius.circular(12),
                   topLeft: Radius.circular(12),
