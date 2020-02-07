@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_material_color_picker/flutter_material_color_picker.dart';
 import 'package:programmerquotes/models/QuetoModel.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../data.dart';
 
@@ -40,7 +42,7 @@ class _HomePageState extends State<HomePage> {
     return Container(
       margin: EdgeInsets.only(bottom: 12),
       width: MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.height / 12,
+      height: MediaQuery.of(context).size.height / 10,
       decoration: BoxDecoration(
           boxShadow: [
             BoxShadow(
@@ -59,9 +61,27 @@ class _HomePageState extends State<HomePage> {
           ])),
       child: Align(
         alignment: Alignment.center,
-        child: Text(
-          "Programming Quotes",
-          style: TextStyle(fontSize: 18, color: Colors.white.withAlpha(232)),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Text(
+              "Programming Quotes",
+              style:
+                  TextStyle(fontSize: 18, color: Colors.white.withAlpha(232)),
+            ),
+            SizedBox(
+              height: 8,
+            ),
+            GestureDetector(
+              onTap: () {
+                _openFullMaterialColorPicker(Theme.of(context).primaryColor);
+              },
+              child: Text(
+                "Tema Değiştir",
+                style: TextStyle(fontSize: 12, color: Colors.white),
+              ),
+            ),
+          ],
         ),
       ),
     );
@@ -113,6 +133,49 @@ class _HomePageState extends State<HomePage> {
           )
         ],
       ),
+    );
+  }
+
+  void _openFullMaterialColorPicker(themeColor) async {
+    _openDialog(
+      "Renk seç",
+      MaterialColorPicker(
+        colors: materialColors,
+        onColorChange: (color) async {
+          print(color.value.toString());
+          var prefs = await SharedPreferences.getInstance();
+          prefs.setInt('color', color.value);
+          print(prefs.getInt('color'));
+          setState(() {
+            themeColor.setColor(color);
+          });
+        },
+      ),
+    );
+  }
+
+  void _openDialog(String title, Widget content) {
+    showDialog(
+      context: context,
+      builder: (_) {
+        return AlertDialog(
+          contentPadding: const EdgeInsets.all(6.0),
+          title: Text(title),
+          content: content,
+          actions: [
+            FlatButton(
+              child: Text('İptal'),
+              onPressed: Navigator.of(context).pop,
+            ),
+            FlatButton(
+              child: Text('Kaydet'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 }
