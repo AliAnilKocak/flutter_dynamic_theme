@@ -22,7 +22,10 @@ class _HomePageState extends State<HomePage> {
     return SafeArea(
       child: Scaffold(
         body: Column(
-          children: <Widget>[buildHeader(context,themeColor), buildBody(themeColor)],
+          children: <Widget>[
+            buildHeader(context, themeColor),
+            buildBody(themeColor)
+          ],
         ),
       ),
     );
@@ -35,14 +38,14 @@ class _HomePageState extends State<HomePage> {
         children: data.map((word) {
           return Padding(
             padding: const EdgeInsets.only(left: 8.0, right: 8.0),
-            child: buildItem(word,themeColor),
+            child: buildItem(word, themeColor),
           );
         }).toList(),
       ),
     );
   }
 
-  buildHeader(BuildContext context,themeColor) {
+  buildHeader(BuildContext context, themeColor) {
     return Container(
       margin: EdgeInsets.only(bottom: 12),
       width: MediaQuery.of(context).size.width,
@@ -52,8 +55,7 @@ class _HomePageState extends State<HomePage> {
             BoxShadow(
               color: themeColor.getColor(),
               blurRadius: 20.0,
-              // has the effect of softening the shadow
-              spreadRadius: 1.0, // has the effect of extending the shadow
+              spreadRadius: 1.0,
             )
           ],
           borderRadius: BorderRadius.only(
@@ -91,7 +93,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  buildItem(QuetoModel data,themeColor) {
+  buildItem(QuetoModel data, themeColor) {
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
@@ -146,13 +148,9 @@ class _HomePageState extends State<HomePage> {
       MaterialColorPicker(
         colors: materialColors,
         onColorChange: (color) async {
-          print(color.value.toString());
           var prefs = await SharedPreferences.getInstance();
           prefs.setInt('color', color.value);
-          print(prefs.getInt('color'));
-          setState(() {
-            themeColor.setColor(color);
-          });
+          themeColor.setColor(color);
         },
       ),
     );
